@@ -57,6 +57,14 @@ function Product_APIProvider({ children }) {
     );
   };
 
+  useEffect(() => {
+    const subTotal = cart.reduce(
+      (sum, item) => sum + Number(item.price) * Number(item.Qty),
+      0
+    );
+    setTotal(subTotal);
+  }, [cart]);
+
   return (
     <>
       <ProductContext.Provider
@@ -77,5 +85,5 @@ function Product_APIProvider({ children }) {
   );
 }
 
-export {ProductContext};
+export { ProductContext };
 export default Product_APIProvider;

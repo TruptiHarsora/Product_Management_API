@@ -1,11 +1,12 @@
 import React from "react";
 import { useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ProductContext } from "./Product_Contex";
 
 const Product_Details = () => {
   const { id } = useParams();
-  const { storeData } = useContext(ProductContext);
+  const { storeData, AddProducts } = useContext(ProductContext);
+  const Nav = useNavigate();
   console.log(id);
 
   const item = storeData.find((val) => val.id === Number(id));
@@ -13,14 +14,22 @@ const Product_Details = () => {
   if (!item) {
     return <h1> Loading Item...</h1>;
   }
+
+  const AddToCart = () => {
+    if (item) {
+      AddProducts(item);
+      Nav(`/cart/${item.id}`);
+    }
+  };
   return (
     <div
       style={{
-        height: "600px",
+        height: "auto",
         width: "500px",
         border: "2px solid black",
         margin: "auto auto",
         padding: "15px",
+        backgroundColor: "lightsteelblue",
       }}
     >
       <div
@@ -28,7 +37,8 @@ const Product_Details = () => {
           height: "250px",
           width: "250px",
           margin: "auto auto",
-          border: "3px solid black",
+          // border: "3px solid black",
+
           padding: "15px",
           overflow: "hidden",
         }}
@@ -49,8 +59,13 @@ const Product_Details = () => {
         <h4>Category :{item.category}</h4>
         <h4>Price:{item.price}</h4>
         <h4>Rating :{item.rating.rate}</h4>
-        <p><b>Description:</b>{item.description}</p>
-        <button style={{padding:"3px 5px"}} onClick={()=> Nav(`/products_details/${val.id}`)}>Add to cart</button>
+        <p>
+          <b>Description:</b>
+          {item.description}
+        </p>
+        <button style={{ padding: "3px 5px" }} onClick={AddToCart}>
+          Add to cart
+        </button>
       </div>
     </div>
   );
