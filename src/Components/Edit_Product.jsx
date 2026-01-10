@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { useContext } from "react";
+import React, { useState , useEffect, useContext} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ProductContext } from "./Product_Contex";
 
@@ -11,33 +10,36 @@ const Edit_Product = () => {
   const [desc, setDesc] = useState("");
   const [price, setPrice] = useState("");
 
-  console.log(id);
+
+  // console.log(id);
 
   const item = storeData.find((val) => val.id === Number(id));
-  console.log(item);
+  // console.log(item);
+
+   useEffect(() => {
+    if (item) {
+      setText(item.title);
+      setPrice(item.price);
+      setDesc(item.description);
+    }
+  }, [item]);
 
   if (!item) {
     return <h1> Loading Item...</h1>;
   }
 
-  const update = () => {
-    if (item) {
-      
-      console.log(item.title);
-      
-      const updateItem = {
-        title: text,
-        price: price,
-        description: desc,
-      };
 
-      updateProduct(item.id, updateItem);
-      console.log(updateItem);
-      //  console.log(newItem);
-      console.log(item.title);
-      Nav(`/`);
-    }
+  const update = () => {
+  const updatedItem = {
+    title: text || item.title,
+    price: price || item.price,
+    description: desc || item.description,
   };
+
+  updateProduct(item.id, updatedItem);
+  Nav("/");
+};
+
   return (
     <div
       style={{
@@ -104,7 +106,7 @@ const Edit_Product = () => {
           {item.description}
         </p>
         <button style={{ padding: "3px 5px" }} onClick={() => update()}>
-          Add to cart
+          Edit Product
         </button>
       </div>
     </div>
